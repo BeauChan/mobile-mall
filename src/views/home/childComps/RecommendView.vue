@@ -26,9 +26,14 @@ export default {
 .recommend {
   display: flex;
     width: 100%;
+    text-align: center;
+    padding: 8px 0 5px;
+    border-bottom: 5px solid #eee;
 }
 .recommend-item {
   flex:1;
-    width: 100%;
+}
+.recommend-item img {
+ width: 100%; /* 图片不再超出屏幕 */
 }
 </style>
