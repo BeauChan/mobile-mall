@@ -3,62 +3,26 @@
     <nav-bar class="home-nav">
       <div slot="center">购物街</div>
     </nav-bar>
-    <HomeSwiper :banners="banners"></HomeSwiper>
-    <recommend-view :recommends="recommends"></recommend-view>
-    <feature-view></feature-view>
-    <tab-control class="tab-control" :items="['流行','新款','精选']"></tab-control>
-    <goods-list :s_goods="goods['pop'].list"></goods-list>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
-    <h2>主页</h2>
+    <scroll class="scroll-content" ref="scroll" :probe-type="3" @getScrollPos="showTopBtn" :pullUpLoad="true" @pulledUp="loadMore"> 
+      <HomeSwiper :banners="banners"></HomeSwiper>
+      <recommend-view :recommends="recommends"></recommend-view>
+      <feature-view></feature-view>
+      <tab-control class="tab-control" :items="['流行','新款','精选']" @tabClick="tabSwitch"></tab-control>
+      <goods-list :s_goods="showGoods"></goods-list>
+    </scroll>
+
+    <to-top @click.native="topClick" v-show="isShowTop"></to-top>
+
   </div>
 </template>
 
 <script>
 import NavBar from "components/common/navbar/NavBar";
-import { getHomeMultiData,getHomeGoodsData } from "network/home";
+import { getHomeMultiData, getHomeGoodsData } from "network/home";
 import TabControl from "components/content/TabControl";
-import GoodsList from 'components/content/goods/GoodsList'
+import GoodsList from "components/content/goods/GoodsList";
+import Scroll from "components/common/scroll/Scroll";
+import ToTop from "components/content/toTop/ToTop";
 
 import HomeSwiper from "./childComps/HomeSwiper";
 import RecommendView from "./childComps/RecommendView";
@@ -73,7 +37,10 @@ export default {
         pop: { page: 0, list: [] },
         new: { page: 0, list: [] },
         sell: { page: 0, list: [] }
-      }
+      },
+      currentIndex: 0,
+      types: ["pop", "new", "sell"],
+      isShowTop:false
     };
   },
   components: {
@@ -82,13 +49,15 @@ export default {
     RecommendView,
     FeatureView,
     TabControl,
-    GoodsList
+    GoodsList,
+    Scroll,
+    ToTop
   },
   created() {
     this.getHomeMulData();
-    this.getHomeGoods('pop');
-    this.getHomeGoods('new');
-    this.getHomeGoods('sell');
+    this.getHomeGoods("pop");
+    this.getHomeGoods("new");
+    this.getHomeGoods("sell");
   },
   methods: {
     getHomeMulData() {
@@ -96,20 +65,45 @@ export default {
         console.log(res);
         this.banners = res.data.banner.list;
         this.recommends = res.data.recommend.list;
-      })
+      });
     },
-    getHomeGoods(type){
-      let page = this.goods[type].page+1
-      getHomeGoodsData(type,page).then(res=>{
+    getHomeGoods(type) {
+      let page = this.goods[type].page + 1;
+      getHomeGoodsData(type, page).then(res => {
         // console.log(res)
-        this.goods[type].list.push(...res.data.list)
-      })
+        this.goods[type].list.push(...res.data.list);
+          this.goods[type].page += 1
+      });
+    },
+    tabSwitch(index) {
+      this.currentIndex = index;
+    },
+    topClick(){
+      this.$refs.scroll.scrollTo(0,0)
+    },
+    showTopBtn(position){
+      this.isShowTop = position.y<-990
+    },
+    loadMore(){
+      this.getHomeGoods(this.types[this.currentIndex])
+      this.$refs.scroll.finPullUp() //不写到getHomeGoods中可以避免初始化时多加载一次
+    }
+  },
+  computed: {
+    showGoods() {
+      return this.goods[this.types[this.currentIndex]].list;
     }
   }
 };
 </script>
 
 <style>
+#home {
+  padding-top: 44px;
+
+  position: relative;
+  height: 100vh;
+}
 .home-nav {
   background-color: var(--color-tint);
   color: #fff;
@@ -119,11 +113,18 @@ export default {
   right: 0;
   z-index: 9;
 }
-#home {
-  padding-top: 44px;
-}
 .tab-control {
   position: sticky;
   top: 44px;
+}
+.scroll-content {
+  /* height: 200px; */
+  position: absolute;
+  top: 44px;
+  bottom: 49px;
+  left: 0;
+  right: 0;
+
+  overflow: hidden;
 }
 </style>
