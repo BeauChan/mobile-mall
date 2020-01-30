@@ -23,6 +23,7 @@ import TabControl from "components/content/TabControl";
 import GoodsList from "components/content/goods/GoodsList";
 import Scroll from "components/common/scroll/Scroll";
 import ToTop from "components/content/toTop/ToTop";
+import {deBounce} from 'common/util'
 
 import HomeSwiper from "./childComps/HomeSwiper";
 import RecommendView from "./childComps/RecommendView";
@@ -87,12 +88,25 @@ export default {
     loadMore(){
       this.getHomeGoods(this.types[this.currentIndex])
       this.$refs.scroll.finPullUp() //不写到getHomeGoods中可以避免初始化时多加载一次
-    }
+    },
+    
   },
   computed: {
     showGoods() {
       return this.goods[this.types[this.currentIndex]].list;
     }
+  },
+  mounted(){
+    const deBuncedRefresh = deBounce(this.$refs.scroll.refreshScroll,100)
+    this.$bus.$on('imageLoaded',()=>{
+      deBuncedRefresh()
+    })
+    
+  },
+  beforeDestroy(){
+    this.$bus.$off('imageLoaded',()=>{
+      console.log('移除imgloaded');
+    })
   }
 };
 </script>

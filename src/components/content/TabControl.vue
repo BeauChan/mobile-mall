@@ -11,7 +11,9 @@ export default {
   props:{
     items:{
       type: Array,
-      default:[]
+      default(){
+        return []
+      }
     }
   },
   data(){

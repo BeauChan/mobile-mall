@@ -33,6 +33,10 @@ export default {
     },
     finPullUp(){
       this.bScroll.finishPullUp()
+    },
+    refreshScroll(){
+      console.log('刷新scroll')
+      this.bScroll.refresh()
     }
   },
   props: {
