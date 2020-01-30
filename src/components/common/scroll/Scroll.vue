@@ -21,7 +21,7 @@ export default {
       pullUpLoad: this.pullUpLoad
     });
     this.bScroll.on("scroll", position => {
-      this.$emit("getScrollPos", position);
+      this.$emit("scrollPos", position);
     });
     this.bScroll.on('pullingUp',()=>{
       this.$emit('pulledUp')

@@ -3,16 +3,34 @@
     <nav-bar class="home-nav">
       <div slot="center">购物街</div>
     </nav-bar>
-    <scroll class="scroll-content" ref="scroll" :probe-type="3" @getScrollPos="showTopBtn" :pullUpLoad="true" @pulledUp="loadMore"> 
+    <scroll
+      class="scroll-content"
+      ref="scroll"
+      :probe-type="3"
+      @scrollPos="getScrollPos"
+      :pullUpLoad="true"
+      @pulledUp="loadMore"
+    >
       <HomeSwiper :banners="banners"></HomeSwiper>
       <recommend-view :recommends="recommends"></recommend-view>
       <feature-view></feature-view>
-      <tab-control class="tab-control" :items="['流行','新款','精选']" @tabClick="tabSwitch"></tab-control>
+      <tab-control
+        :items="['流行','新款','精选']"
+        @tabClick="tabSwitch"
+        ref="tabCtrl"
+      ></tab-control>
       <goods-list :s_goods="showGoods"></goods-list>
     </scroll>
 
     <to-top @click.native="topClick" v-show="isShowTop"></to-top>
 
+    <tab-control
+        :items="['流行','新款','精选']"
+        @tabClick="tabSwitch"
+        ref="tabCtrl_2"
+        class="tab-control"
+        v-show="isTabCtrlTop"
+      ></tab-control>
   </div>
 </template>
 
@@ -23,7 +41,7 @@ import TabControl from "components/content/TabControl";
 import GoodsList from "components/content/goods/GoodsList";
 import Scroll from "components/common/scroll/Scroll";
 import ToTop from "components/content/toTop/ToTop";
-import {deBounce} from 'common/util'
+import { deBounce } from 'common/util'
 
 import HomeSwiper from "./childComps/HomeSwiper";
 import RecommendView from "./childComps/RecommendView";
@@ -41,8 +59,10 @@ export default {
       },
       currentIndex: 0,
       types: ["pop", "new", "sell"],
-      isShowTop:false
-    };
+      isShowTop: false,
+      isTabCtrlTop: false,
+      tabCtrlOffsetTop: 0
+    }
   },
   components: {
     NavBar,
@@ -73,40 +93,46 @@ export default {
       getHomeGoodsData(type, page).then(res => {
         // console.log(res)
         this.goods[type].list.push(...res.data.list);
-          this.goods[type].page += 1
+        this.goods[type].page += 1
       });
     },
     tabSwitch(index) {
       this.currentIndex = index;
+      this.$refs.tabCtrl.curIndex = index
+      this.$refs.tabCtrl_2.curIndex = index
     },
-    topClick(){
-      this.$refs.scroll.scrollTo(0,0)
+    topClick() {
+      this.$refs.scroll.scrollTo(0, 0)
     },
-    showTopBtn(position){
-      this.isShowTop = position.y<-990
+    getScrollPos(position) {
+      this.isShowTop = position.y < -990
+      this.isTabCtrlTop=position.y< -this.tabCtrlOffsetTop
     },
-    loadMore(){
+    loadMore() {
       this.getHomeGoods(this.types[this.currentIndex])
       this.$refs.scroll.finPullUp() //不写到getHomeGoods中可以避免初始化时多加载一次
     },
-    
+
   },
   computed: {
     showGoods() {
       return this.goods[this.types[this.currentIndex]].list;
     }
   },
-  mounted(){
-    const deBuncedRefresh = deBounce(this.$refs.scroll.refreshScroll,100)
-    this.$bus.$on('imageLoaded',()=>{
+  mounted() {
+    const deBuncedRefresh = deBounce(this.$refs.scroll.refreshScroll, 50)
+    this.$bus.$on('imageLoaded', () => {
       deBuncedRefresh()
     })
-    
+
   },
-  beforeDestroy(){
-    this.$bus.$off('imageLoaded',()=>{
+  beforeDestroy() {
+    this.$bus.$off('imageLoaded', () => {
       console.log('移除imgloaded');
     })
+  },
+  updated() {
+    this.tabCtrlOffsetTop = this.$refs.tabCtrl.$el.offsetTop
   }
 };
 </script>
@@ -128,8 +154,10 @@ export default {
   z-index: 9;
 }
 .tab-control {
-  position: sticky;
-  top: 44px;
+  /* position: sticky;
+  top: 44px; */
+  position: relative;
+  z-index: 9;
 }
 .scroll-content {
   /* height: 200px; */
