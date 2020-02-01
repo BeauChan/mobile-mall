@@ -28,7 +28,7 @@
         :items="['流行','新款','精选']"
         @tabClick="tabSwitch"
         ref="tabCtrl_2"
-        class="tab-control"
+        class="tab-control tab-control-2"
         v-show="isTabCtrlTop"
       ></tab-control>
   </div>
@@ -106,7 +106,7 @@ export default {
     },
     getScrollPos(position) {
       this.isShowTop = position.y < -990
-      this.isTabCtrlTop=position.y< -this.tabCtrlOffsetTop
+      this.isTabCtrlTop=position.y< -this.tabCtrlOffsetTop  //offsetTop是元素距离顶部的距离，固定值
     },
     loadMore() {
       this.getHomeGoods(this.types[this.currentIndex])
@@ -139,7 +139,7 @@ export default {
 
 <style>
 #home {
-  padding-top: 44px;
+  padding-top: 41px;
 
   position: relative;
   height: 100vh;
@@ -158,12 +158,17 @@ export default {
   top: 44px; */
   position: relative;
   z-index: 9;
+  padding-bottom: 8px;
+}
+.tab-control-2 {
+  padding-bottom: 2px;
+
 }
 .scroll-content {
   /* height: 200px; */
   position: absolute;
-  top: 44px;
-  bottom: 49px;
+  top: 41px;
+  bottom: 46px;
   left: 0;
   right: 0;
 

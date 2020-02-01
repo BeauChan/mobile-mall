@@ -36,4 +36,7 @@ export default {
 .recommend-item img {
  width: 100%; /* 图片不再超出屏幕 */
 }
+.recommend-item span {
+  font-size: 17px;
+}
 </style>

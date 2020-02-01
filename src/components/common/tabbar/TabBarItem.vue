@@ -40,14 +40,14 @@ export default {
 .tab-bar-item {
   flex: 1;
   text-align: center;
-  height: 49px;
-  font-size: 14px;
+  height: 46px;
+  font-size: 13px;
 }
 .tab-bar-item img {
-  height: 24px;
-  width: 24px;
+  height: 22px;
+  width: 22px;
   vertical-align: middle;
-  margin-top: 5px;
+  margin: 5px 0 2px;
 }
 .active {
   color: red;

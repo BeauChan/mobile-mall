@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import { Swipe, SwipeItem } from 'vant'
 import 'vant/lib/index.css';
+import 'amfe-flexible/index.js'
 
 Vue.use(Swipe);
 Vue.use(SwipeItem);

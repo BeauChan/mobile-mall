@@ -30,7 +30,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .tab-control {
   display: flex;
   font-size: 15px;
@@ -39,8 +39,8 @@ export default {
 .tab-control-item {
   flex: 1;
   text-align: center;
-  height: 39px;
-  line-height: 39px;
+  height: 30px;
+  line-height: 30px;
 }
 .active {
   color: var(--color-high-text);

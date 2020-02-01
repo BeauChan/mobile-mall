@@ -1,5 +1,4 @@
 <template>
-  <div class="block">
     <!-- <el-carousel trigger="click" height="150px">
       <el-carousel-item v-for="item in banners" :key="item.item">
         <a :href="item.link">
@@ -15,7 +14,6 @@
         </a>
       </van-swipe-item>
     </van-swipe>
-  </div>
 </template>
 
 <script>
