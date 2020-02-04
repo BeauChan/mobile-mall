@@ -39,12 +39,12 @@ export default {
 .tab-control-item {
   flex: 1;
   text-align: center;
-  height: 30px;
-  line-height: 30px;
+  height: 35px;
+  line-height: 35px;
 }
 .active {
   color: var(--color-high-text);
   border-bottom: 3px solid var(--color-high-text);
-  padding: 6px;
+  padding: 5px 45px 6px;
 }
 </style>

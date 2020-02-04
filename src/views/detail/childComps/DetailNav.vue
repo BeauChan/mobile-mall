@@ -26,7 +26,11 @@ export default {
       this.$router.back()
     },
     navClick(index){
-      this.currentIndex = index
+      // this.currentIndex = index
+      this.$emit('navTabClick',index)
+      console.log(this.scrollIndex);
+      console.log(this.currentIndex);
+      
     }
   }
 }

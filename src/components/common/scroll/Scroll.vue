@@ -23,20 +23,20 @@ export default {
     this.bScroll.on("scroll", position => {
       this.$emit("scrollPos", position);
     });
-    this.bScroll.on('pullingUp',()=>{
+    this.bScroll.on('pullingUp', () => {
       this.$emit('pulledUp')
     })
   },
   methods: {
     scrollTo(x, y, time = 600) {
-      this.bScroll.scrollTo(x, y, time);
+      this.bScroll && this.bScroll.scrollTo(x, y, time);
     },
-    finPullUp(){
-      this.bScroll.finishPullUp()
+    finPullUp() {
+      this.bScroll && this.bScroll.finishPullUp()
     },
-    refreshScroll(){
+    refreshScroll() {
       console.log('刷新scroll')
-      this.bScroll.refresh()
+      this.bScroll && this.bScroll.refresh()
     }
   },
   props: {

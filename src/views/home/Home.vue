@@ -19,7 +19,7 @@
         @tabClick="tabSwitch"
         ref="tabCtrl"
       ></tab-control>
-      <goods-list :s_goods="showGoods"></goods-list>
+      <goods-list :goods-list="showGoods" :page-id="0"></goods-list>
     </scroll>
 
     <to-top @click.native="topClick" v-show="isShowTop"></to-top>
@@ -42,10 +42,12 @@ import GoodsList from "components/content/goods/GoodsList";
 import Scroll from "components/common/scroll/Scroll";
 import ToTop from "components/content/toTop/ToTop";
 import { deBounce } from 'common/util'
+import {backToTop} from 'common/mixin'
 
 import HomeSwiper from "./childComps/HomeSwiper";
 import RecommendView from "./childComps/RecommendView";
 import FeatureView from "./childComps/FeatureView";
+
 
 export default {
   data() {
@@ -59,11 +61,12 @@ export default {
       },
       currentIndex: 0,
       types: ["pop", "new", "sell"],
-      isShowTop: false,
+      // isShowTop: false,
       isTabCtrlTop: false,
       tabCtrlOffsetTop: 0
     }
   },
+  mixins:[backToTop],
   components: {
     NavBar,
     HomeSwiper,
@@ -72,7 +75,7 @@ export default {
     TabControl,
     GoodsList,
     Scroll,
-    ToTop
+    // ToTop
   },
   created() {
     this.getHomeMulData();
@@ -91,7 +94,7 @@ export default {
     getHomeGoods(type) {
       let page = this.goods[type].page + 1;
       getHomeGoodsData(type, page).then(res => {
-        // console.log(res)
+        console.log(res)
         this.goods[type].list.push(...res.data.list);
         this.goods[type].page += 1
       });
@@ -101,9 +104,9 @@ export default {
       this.$refs.tabCtrl.curIndex = index
       this.$refs.tabCtrl_2.curIndex = index
     },
-    topClick() {
-      this.$refs.scroll.scrollTo(0, 0)
-    },
+    // topClick() {
+    //   this.$refs.scroll.scrollTo(0, 0)
+    // },
     getScrollPos(position) {
       this.isShowTop = position.y < -990
       this.isTabCtrlTop=position.y< -this.tabCtrlOffsetTop  //offsetTop是元素距离顶部的距离，固定值
@@ -161,7 +164,7 @@ export default {
   padding-bottom: 8px;
 }
 .tab-control-2 {
-  padding-bottom: 2px;
+  padding-bottom: 0;
 
 }
 .scroll-content {
