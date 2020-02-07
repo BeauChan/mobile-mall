@@ -35,7 +35,8 @@ export default {
       this.bScroll && this.bScroll.finishPullUp()
     },
     refreshScroll() {
-      console.log('刷新scroll')
+      // console.log('刷新scroll')
+      // debugger 
       this.bScroll && this.bScroll.refresh()
     }
   },

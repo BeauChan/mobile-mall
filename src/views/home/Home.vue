@@ -1,7 +1,7 @@
 <template>
   <div id="home">
     <nav-bar class="home-nav">
-      <div slot="center">购物街</div>
+      <div slot="center">购 物 街</div>
     </nav-bar>
     <scroll
       class="scroll-content"
@@ -126,6 +126,7 @@ export default {
     const deBuncedRefresh = deBounce(this.$refs.scroll.refreshScroll, 50)
     this.$bus.$on('imageLoaded', () => {
       deBuncedRefresh()
+      // console.log('home refresh');
     })
 
   },
@@ -136,6 +137,9 @@ export default {
   },
   updated() {
     this.tabCtrlOffsetTop = this.$refs.tabCtrl.$el.offsetTop
+  },
+  deactivated(){
+    this.$bus.$off('imageLoaded')
   }
 };
 </script>

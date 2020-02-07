@@ -1,6 +1,6 @@
 <template>
   <div class="goods-item" @click="itemDetail">
-    <img :src="getImage" alt @load="imgLoaded" />
+    <img v-lazy="getImage" alt @load="imgLoaded" />
     <div class="item-info">
       <p>{{item.title}}</p>
       <span>{{item.price}}</span>
@@ -29,7 +29,7 @@ export default {
     imgLoaded() {
       this.$bus.$emit('imageLoaded')
       // console.log(this.pageId);
-      
+
     },
     itemDetail() {
       switch (this.pageId) {
@@ -52,6 +52,8 @@ export default {
 <style>
 .goods-item {
   width: 48%;
+  text-align: center;
+  margin-bottom: 4px;
 }
 .goods-item img {
   width: 100%;
@@ -82,5 +84,10 @@ export default {
   width: 14px;
   height: 14px;
   background: url("~assets/img/common/collect.svg") 0 0/14px 14px;
+}
+img[lazy="loading"] {
+  width: 18px;
+  height: 18px;
+  opacity: 0.4;
 }
 </style>

@@ -2,15 +2,16 @@
   <div id="detail">
     <detail-nav @navTabClick="navTabClick" ref="nav"></detail-nav>
     <scroll class="scroll-content" ref="scroll" @scrollPos="getScrollPos" :probe-type="3">
-      <detail-swiper :topImages="topImg"></detail-swiper>
+      <detail-swiper :topImages="goods.topImgs"></detail-swiper>
       <base-info :goods="goods"></base-info>
       <shop-info :shop="shop"></shop-info>
       <goods-info :goods-detail="goodsDetail" @imgLoaded="goodsImgsLoaded"></goods-info>
       <params-info :goods-params="goodsParams" ref="paramsInfo"></params-info>
       <comment-info :goods-comments="goodsComments" ref="commentInfo"></comment-info>
+      <div class="moreItems">—— 更多好物 ——</div>
       <goods-list :goods-list="goodsRecommend" :page-id="1" ref="recommend"></goods-list>
     </scroll>
-    <bottom-bar></bottom-bar>
+    <bottom-bar @addCart="addToCart"></bottom-bar>
     <to-top @click.native="topClick" v-show="isShowTop"></to-top>
   </div>
 </template>
@@ -35,7 +36,7 @@ export default {
   data() {
     return {
       id: null,
-      topImg: [],
+      // topImg: [],
       goods: {},  //此处不能null
       shop: {},
       goodsDetail: {},
@@ -51,8 +52,8 @@ export default {
     this.id = this.$route.params.iid,
       getDetailData(this.id).then(res => {
         const result = res.result
-        this.topImg = result.itemInfo.topImages
-        // console.log(res);
+        // this.topImg = result.itemInfo.topImages
+        console.log(res);
 
         this.goods = new Goods(result.columns, result.itemInfo, result.shopInfo)
 
@@ -74,7 +75,7 @@ export default {
         this.compsPosition.push(0)
         this.compsPosition.push(this.$refs.paramsInfo.$el.offsetTop)
         this.compsPosition.push(this.$refs.commentInfo.$el.offsetTop)
-        this.compsPosition.push(this.$refs.recommend.$el.offsetTop)
+        this.compsPosition.push(this.$refs.recommend.$el.offsetTop-44)  
       }, 0)
   },
   components: {
@@ -109,10 +110,22 @@ export default {
         this.navTabIndex = 2
       else if(y<=-this.compsPosition[3])
         this.navTabIndex = 3
-
       this.$refs.nav.currentIndex = this.navTabIndex
 
       this.isShowTop = position.y < -990
+    },
+    addToCart(){
+      const currentGoods = {}
+      currentGoods.id = this.id
+      currentGoods.desc = this.goods.desc
+      currentGoods.image = this.goods.topImgs[0]
+      currentGoods.price = this.goods.realPrice
+      currentGoods.title = this.goods.title
+      currentGoods.count = 1
+      //添加进购物车然后回调出toast
+      this.$store.dispatch('addCartList',currentGoods).then(promise =>{
+        this.$toast.showToast(promise)
+      })
     }
   }
 }
@@ -134,5 +147,11 @@ export default {
   right: 0;
   /* 溢出滚动区域的部分隐藏，这样就不会挡到navbar了，但会引发bfc */
   overflow: hidden;
+}
+.moreItems {
+  font-size: 19px;
+  text-align: center;
+  margin: 1px 0 10px;
+  color: rgb(165, 165, 165);
 }
 </style>

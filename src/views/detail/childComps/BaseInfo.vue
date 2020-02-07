@@ -41,10 +41,11 @@ export default {
   border-bottom: 5px solid #f2f5f8;
 }
 .goods-title {
-  font-size: 20px;
-  font-weight: 500;
+  font-size: 18px;
+  font-weight: 700;
   padding: 0 0 10px 0px;
-  color: var(--color-text);
+  color: rgb(73, 73, 73);
+  line-height: 24px;
 }
 .price-info {
   margin: 0 0 16px 0;

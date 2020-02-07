@@ -77,7 +77,7 @@ export default {
 #tab-bar {
   display: flex;
   background-color: #f3f3f3;
-  box-shadow: 0 -2px rgba(100, 100, 100, 0.2);
+  box-shadow: 0 -1px rgba(100, 100, 100, 0.3);
 
   position: fixed;
   bottom: 0;

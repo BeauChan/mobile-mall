@@ -25,10 +25,10 @@ export default {
   components:{
     GoodsListItem
   },
-  mounted(){
-    console.log(this.s_goods);
+  // mounted(){
+  //   console.log(this.s_goods);
     
-  }
+  // }
   // computed:{
   //   getList(){
   //     this.s_goods = s_goods

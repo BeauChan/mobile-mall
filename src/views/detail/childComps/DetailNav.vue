@@ -28,15 +28,15 @@ export default {
     navClick(index){
       // this.currentIndex = index
       this.$emit('navTabClick',index)
-      console.log(this.scrollIndex);
-      console.log(this.currentIndex);
+      // console.log(this.scrollIndex);
+      // console.log(this.currentIndex);
       
     }
   }
 }
 </script>
 
-<style>
+<style scoped>
 
 .title {
   display: flex;
